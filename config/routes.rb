@@ -12,6 +12,12 @@ Spree::Core::Engine.add_routes do
     resources :customer_shipments_tracking, only: [:index]
 
     resources :easypost_settings, only: [:edit, :update]
+
+    resources :shipments do
+      member do
+        put :buy_postage
+      end
+    end
   end
 
   namespace :api do
