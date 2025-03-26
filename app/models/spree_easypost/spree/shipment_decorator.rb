@@ -41,7 +41,7 @@ module SpreeEasypost
           zip: stock_location[:zipcode],
           country: stock_location.country[:iso],
           phone: stock_location[:phone],
-          email: order.store.customer_support_email,
+          email: order.store.customer_support_email
         )
         # Purchase the postage unless it was purchased before
         unless self.tracking?

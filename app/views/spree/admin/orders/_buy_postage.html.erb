@@ -5,7 +5,7 @@
       <div class='clearfix'></div>
     <% end %>
   <% elsif shipment.ready? %>
-    <%= form_tag buy_postage_admin_shipment_path(shipment), method: :put, class: 'ship-postage pull-right btn', style: 'margin-left: 15px;' do %>
+    <%= form_tag buy_postage_admin_shipment_path(shipment), method: :put, data: { turbo: false }, class: 'ship-postage pull-right btn', style: 'margin-left: 15px;' do %>
       <%= submit_tag Spree.t(:buy_postage), class: 'pull-right btn btn-primary', style: 'margin-left: 15px;' %>
     <% end %>
   <% end %>
