@@ -3,11 +3,7 @@ module SpreeEasypost
     module Easypost
       module OrderDecorator
         def easypost_rate_total
-          def easypost_rate_total
-            def easypost_rate_total
-              shipments.sum { |shipment| shipment.shipping_rates.sum { |rate| rate.easy_post_rate.to_f } }
-            end            
-          end          
+          shipments.sum { |shipment| shipment.shipping_rates.sum { |rate| rate.easy_post_rate.to_f } }        
         end
       end
     end
