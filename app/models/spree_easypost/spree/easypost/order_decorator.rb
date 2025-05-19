@@ -5,6 +5,10 @@ module SpreeEasypost
         def easypost_rate_total
           shipments.sum { |shipment| shipment.shipping_rates.sum { |rate| rate.easy_post_rate.to_f } }        
         end
+
+        def abandoned?
+          self.completed? == false && ( self.state == 'delivery' || self.state == 'payment' || self.state == 'confirm' )
+        end
       end
     end
   end
