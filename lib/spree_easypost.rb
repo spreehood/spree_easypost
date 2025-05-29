@@ -1,4 +1,6 @@
 require 'spree_core'
+require 'spree/core/preferences/store'
+require 'spree_easypost/configuration'
 require 'spree_easypost/engine'
 require 'spree_easypost/version'
 require 'easypost'

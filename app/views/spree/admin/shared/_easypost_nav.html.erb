@@ -1,0 +1,7 @@
+<% easypost_active = %[easypost_settings].include?(controller_name) || @order %>
+
+<% if can?(:manage, SpreeEasypost::Spree::Easypost) %>
+  <% easypost_label = Spree.t(:easy_post) %>
+
+  <%= nav_item(easypost_label.html_safe, spree.edit_admin_easypost_setting_path(id: "easypost_settings"), icon: 'ship', active: easypost_active) %>
+<% end %>

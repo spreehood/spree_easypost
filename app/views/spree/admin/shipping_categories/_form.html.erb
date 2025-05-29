@@ -1,15 +1,15 @@
-<div data-hook="admin_shipping_category_form_fields">
-  <div data-hook="name" class="form-group">
-    <%= f.field_container :name do %>
-      <%= f.label :name, Spree.t(:name) %><br>
-      <%= f.text_field :name, class: 'form-control' %>
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="form-group">
+      <%= f.label :name, Spree.t(:name) %>
+      <%= f.text_field :name, class: 'form-control', autofocus: f.object.new_record?, required: true %>
       <%= f.error_message_on :name %>
-    <% end %>
-  </div>
-  <div data-hook='admin_shipping_category_easypost'>
-    <%= f.field_container :use_easypost, class: ['form-check'] do %>
-      <%= f.check_box :use_easypost, class: 'form-check-input' %>
-      <%= f.label :use_easypost, Spree.t(:use_easypost), class: 'form-check-label' %>
-    <% end %>
+    </div>
+    <div class="form-group">
+      <div class="form-check">
+        <%= f.check_box :use_easypost, class: 'form-check-input cursor-pointer' %>
+        <%= f.label :use_easypost, Spree.t(:use_easypost), class: 'form-check-label' %>
+      </div>
+    </div>
   </div>
 </div>

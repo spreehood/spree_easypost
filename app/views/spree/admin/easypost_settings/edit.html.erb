@@ -1,4 +1,6 @@
-<h1><%= t('easypost_settings') %></h1>
+<% content_for :page_title do %>
+  <%= Spree.t(:easy_post_settings) %>
+<% end %>
 
 <%= form_tag admin_easypost_setting_path, method: :put, id: :easypost_settings_form do %>
   <div class="yui-g">

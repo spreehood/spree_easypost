@@ -25,5 +25,7 @@ en:
     scan_form: "Scan Form"
     admin:
       easy_post_hs_tariff_number: "Tariff Number"
-    easy_post_settings: "easy post settings"
+    easy_post_settings: "Easy Post Settings"
+    easy_post: "Easy Post"
+    easypost_settings_updated: "EasyPost settings updated successfully."
     
