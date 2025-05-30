@@ -7,11 +7,30 @@ module Spree
       end
 
       def update
-        update_easypost_settings
+        easypost_settings_params.each do |name, value|
+          boolean_prefs = [:enabled, :buy_postage_when_shipped, :validate_address_with_easypost, :use_easypost_on_frontend]
+          integer_prefs = [:returns_stock_location_id]
 
-        redirect_to admin_easypost_setting_path
+          value = if boolean_prefs.include?(name.to_sym)
+            ActiveModel::Type::Boolean.new.cast(value)
+          elsif integer_prefs.include?(name.to_sym)
+            value.to_i
+          else
+            value
+          end
+
+          # Save to preference store with Spree-standard key format
+          preference_key = "spree_easypost/config/#{name}"
+          Spree::Preference.where(key: preference_key).destroy_all
+          Spree::Preference.create(key: preference_key, value: value)
+
+          # Update runtime config
+          SpreeEasypost::Config[name] = value if SpreeEasypost::Config.respond_to?("#{name}=")
+        end
+
+        flash[:success] = Spree.t(:easypost_settings_updated)
+        redirect_to edit_admin_easypost_setting_path
       end
-
       private
 
       def load_stock_locations

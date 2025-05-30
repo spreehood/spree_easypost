@@ -4,19 +4,27 @@ module SpreeEasypost
     isolate_namespace Spree
     engine_name 'spree_easypost'
 
+    config.autoload_paths += %W[#{config.root}/lib]
+
     # use rspec for tests
     config.generators do |g|
       g.test_framework :rspec
     end
 
-    initializer 'spree_easypost.environment', before: 'spree.environment' do |app|
-      require File.join(File.dirname(__FILE__), '../../app/models/spree_easypost/configuration.rb')
+    initializer "spree_easypost.environment", before: :load_config_initializers do |_app|
+      require 'spree/core/preferences/store'
+      SpreeEasypost::Config = SpreeEasypost::Configuration.new
     end
 
-    initializer 'spree_easypost.environment', before: :load_config_initializers do |app|
-      SpreeEasypost::Config = SpreeEasypost::Configuration.new
-
-     #  Spree::ShippingMethod::DISPLAY += [:none]
+    config.after_initialize do
+      begin
+        if defined?(Spree::Core::Engine) && ActiveRecord::Base.connection.table_exists?('spree_preferences')
+          SpreeEasypost::Config.load_preferences
+          Rails.logger.info "SpreeEasypost preferences loaded successfully"
+        end
+      rescue StandardError => e
+        Rails.logger.error "Failed to load SpreeEasypost preferences: #{e.message}"
+      end
     end
 
     def self.activate
