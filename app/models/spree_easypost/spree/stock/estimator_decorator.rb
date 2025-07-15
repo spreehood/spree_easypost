@@ -10,7 +10,9 @@ module SpreeEasypost
 
           if use_easypost_to_calculate_rate?(package, shipping_method_filter)
             shipment = package.easypost_shipment
-            rates = shipment.rates.sort_by { |r| r.rate.to_i }
+
+            # restricting to use only GroundAdvantage service
+            rates = shipment.rates.select { |r| r.service == 'GroundAdvantage' }
 
             shipping_rates = []
 
@@ -22,7 +24,8 @@ module SpreeEasypost
                 calculator = shipping_method.calculator
                 # Create the easypost rate
                 spree_rate = ::Spree::ShippingRate.new(
-                  cost: calculator.type == "Spree::Calculator::Shipping::EasypostRate" ? rate.rate : calculator.compute(package),
+                  easy_post_rate: calculator.type == "Spree::Calculator::Shipping::EasypostRate" ? rate.rate : calculator.compute(package),
+                  cost: ENV['SHIPMENT_RATE'] || 5.99,
                   easy_post_shipment_id: rate.shipment_id,
                   easy_post_rate_id: rate.id,
                   shipping_method: shipping_method

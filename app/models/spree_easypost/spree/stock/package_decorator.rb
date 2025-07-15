@@ -5,13 +5,21 @@ module SpreeEasypost
 
         US_STATES_REQUIRING_CUSTOMS = ["AS", "GU", "MP", "PR", "VI", "UM", "AP", "AE", "AA"]
 
+        def skip_easypost_calls?
+          order.abandoned?
+        end
+
         def easypost_parcel
-         @client = ::EasyPost::Client.new(api_key: ::SpreeEasypost::Config[:api_key])
-         @client.parcel.create(
-          weight: weight)
+          return nil unless use_easypost?
+          
+          @client = ::EasyPost::Client.new(api_key: ::SpreeEasypost::Config[:api_key])
+          @client.parcel.create(
+            weight: weight)
         end
 
         def use_easypost?
+          return false if skip_easypost_calls?
+          
           order.ship_address.present? && shipping_categories.any? { |shipping_category| shipping_category.use_easypost }
         end
 
@@ -86,8 +94,10 @@ module SpreeEasypost
         end
 
        def easypost_shipment
-        @client = ::EasyPost::Client.new(api_key: ::SpreeEasypost::Config[:api_key])
-        @client.shipment.create(
+          return nil unless use_easypost?
+
+          @client = ::EasyPost::Client.new(api_key: ::SpreeEasypost::Config[:api_key])
+          @client.shipment.create(
             to_address: order.ship_address.try(:easypost_address),
             from_address: stock_location.try(:easypost_address),
             return_address: stock_location_returns.try(:easypost_address),
